@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import com.mb.R;
 import com.mb.gui.GUIInterface;
 import com.mb.gui.fragments.homeActivityFrags.HomeFragment;
+import com.mb.gui.fragments.homeActivityFrags.NewItemFragment;
 
 import java.util.Hashtable;
 
@@ -28,7 +29,8 @@ public class HomeActivity extends AppCompatActivity
 
     private HomeFragment homeFragment;
     private HomeActivitHelper helper;
-
+    private NewItemFragment newItemFragment;
+    private FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,14 +38,8 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -57,14 +53,22 @@ public class HomeActivity extends AppCompatActivity
 
         homeFragment = HomeFragment.newInstance("","");
         helper = new HomeActivitHelper();
-//        helper.changeFragment(homeFragment,"homeFragment");
+        newItemFragment = new NewItemFragment();
+        newItemFragment.setStartParams(getSupportActionBar(),fab);
+
+
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.animator.slide_left_in, R.animator.slide_left_out,
                 R.animator.slide_left_in, R.animator.slide_left_out);
         fragmentTransaction.replace(R.id.homeActivity_fragmentcontainer, homeFragment);
         fragmentTransaction.commit();
-
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                helper.changeFragment(newItemFragment,"newItemFragment");
+            }
+        });
 
     }
 
